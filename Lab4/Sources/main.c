@@ -333,6 +333,13 @@ bool setFlag(bool currentState, bool *previousState){
 ******************************************************************************
 * QUESTIONS TO BE ANSWERED IN COMMENTS AT THE END OF YOUR CODE               *
 1) What other applications might timers have?
+   timers have a number of important uses in microcontrollers.  They can 
+   be used to check the state on other io devices, or generate AC signals.
+
 2) What is the speed of the oscillator? (Refer to the schematics!!)
+   8MHz
+
 3) What changes would need to be made if the Oscillator speed was changed?
+   The Real-Time interrupt control: RTICTL would need to change OR,
+   the timerLimit variable...
 */
