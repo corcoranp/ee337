@@ -35,7 +35,7 @@ Section Name                    Size  Type     From       To       Segment
 .startData                        10     R     0xC015     0xC01E   ROM_C000
 NON_BANKED                       121     R     0xC01F     0xC097   ROM_C000
 .copy                             11     R     0xC098     0xC0A2   ROM_C000
-.text                            310     R   0x308000   0x308135   PAGE_30
+.text                            355     R   0x308000   0x308162   PAGE_30
 .stack                           256   R/W     0x1000     0x10FF   RAM
 .data                              6   R/W     0x1100     0x1105   RAM
 .abs_section_8                     1   N/I        0x8        0x8   .absSeg0
@@ -385,7 +385,7 @@ NON_BANKED                       121     R     0xC01F     0xC097   ROM_C000
 .vectSeg342_vect                   2     R     0xFFFE     0xFFFF   .vectSeg342
 
 Summary of section sizes per section type:
-READ_ONLY (R):         1DD (dec:      477)
+READ_ONLY (R):         20A (dec:      522)
 READ_WRITE (R/W):      11C (dec:      284)
 NO_INIT (N/I):         190 (dec:      400)
 
@@ -745,22 +745,23 @@ MODULE:                 -- mc9s12dg256.c.o --
      _CAN4TXTSR                                 2BE       2       2       0   .abs_section_2be
 MODULE:                 -- main.c.o --
 - PROCEDURES:
-     main                                    308000       E      14       2   .text       
-     initializeLab                           30800E      11      17       2   .text       
-     initSystemClock                         30801F      13      19       2   .text       
-     initSystemPorts                         308032      12      18       2   .text       
-     initSystemInterrupts                    308044      16      22       2   .text       
-     compliment                              30805A      15      21       4   .text       
-     systemController                        30806F      43      67       2   .text       
-     updateDisplay                           3080B2      2F      47       2   .text       
-     setFlag                                 3080E1      2C      44       8   .text       
+     main                                    308000      12      18       2   .text       
+     initializeLab                           308012      11      17       2   .text       
+     initSystemClock                         308023      13      19       2   .text       
+     initSystemPorts                         308036      12      18       2   .text       
+     initSystemInterrupts                    308048      16      22       2   .text       
+     compliment                              30805E      15      21       2   .text       
+     systemController                        308073      73     115       2   .text       
+     updateDisplay                           3080E6       B      11       2   .text       
+     updateTimer                             3080F1      25      37       2   .text       
+     setFlag                                 308116      24      36       8   .text       
      checkState                                C01F      79     121       1   NON_BANKED  
 - VARIABLES:
-     counterUpperLimit                         1100       2       2       1   .data       
-     isCounterOn                               1102       2       2       2   .data       
-     isCountingUp                              1104       2       2       2   .data       
-     counter                                   1106       2       2       6   .bss        
-     counterLowerLimit                         1108       2       2       1   .bss        
+     counterUpperLimit                         1100       2       2       3   .data       
+     isCounterOn                               1102       2       2       3   .data       
+     isCountingUp                              1104       2       2       4   .data       
+     counter                                   1106       2       2      10   .bss        
+     counterLowerLimit                         1108       2       2       3   .bss        
      timer                                     110A       2       2       4   .bss        
      isCounterOnFlagged                        110C       2       2       3   .bss        
      isCountingUpFlagged                       110E       2       2       3   .bss        
@@ -770,7 +771,7 @@ MODULE:                 -- main.c.o --
      buttonState                               1114       8       8       8   .common     
 MODULE:                 -- Start12.c.o --
 - PROCEDURES:
-     Init                                    30810D      29      41       2   .text       
+     Init                                    30813A      29      41       2   .text       
      _Startup                                  C000      15      21       0   .init       
 - VARIABLES:
      _startupData                              C015       6       6       3   .startData  
@@ -782,7 +783,7 @@ MODULE STATISTIC
   Name                                      Data   Code  Const
 ---------------------------------------------------------------------------------------------
   mc9s12dg256.c.o                            400      0      0
-  main.c.o                                    28    390      2
+  main.c.o                                    28    435      2
   Start12.c.o                                  0     62      0
   other                                      256     12     11
 
@@ -791,7 +792,7 @@ SECTION USE IN OBJECT-ALLOCATION SECTION
 ---------------------------------------------------------------------------------------------
 SECTION: ".text"
   main initializeLab initSystemClock initSystemPorts initSystemInterrupts 
-  compliment systemController updateDisplay setFlag Init 
+  compliment systemController updateDisplay updateTimer setFlag Init 
 SECTION: ".data"
   counterUpperLimit isCounterOn isCountingUp 
 SECTION: ".bss"
@@ -1833,11 +1834,11 @@ OBJECT LIST SORTED BY ADDRESS
      _CAN4TXDLR                                 2BC       1       1       0   .abs_section_2bc
      _CAN4TXTBPR                                2BD       1       1       0   .abs_section_2bd
      _CAN4TXTSR                                 2BE       2       2       0   .abs_section_2be
-     counterUpperLimit                         1100       2       2       1   .data       
-     isCounterOn                               1102       2       2       2   .data       
-     isCountingUp                              1104       2       2       2   .data       
-     counter                                   1106       2       2       6   .bss        
-     counterLowerLimit                         1108       2       2       1   .bss        
+     counterUpperLimit                         1100       2       2       3   .data       
+     isCounterOn                               1102       2       2       3   .data       
+     isCountingUp                              1104       2       2       4   .data       
+     counter                                   1106       2       2      10   .bss        
+     counterLowerLimit                         1108       2       2       3   .bss        
      timer                                     110A       2       2       4   .bss        
      isCounterOnFlagged                        110C       2       2       3   .bss        
      isCountingUpFlagged                       110E       2       2       3   .bss        
@@ -1847,16 +1848,17 @@ OBJECT LIST SORTED BY ADDRESS
      _Startup                                  C000      15      21       0   .init       
      checkState                                C01F      79     121       1   NON_BANKED  
      _Vector_7                                 FFF0       2       2       0   .abs_section_fff0
-     main                                    308000       E      14       2   .text       
-     initializeLab                           30800E      11      17       2   .text       
-     initSystemClock                         30801F      13      19       2   .text       
-     initSystemPorts                         308032      12      18       2   .text       
-     initSystemInterrupts                    308044      16      22       2   .text       
-     compliment                              30805A      15      21       4   .text       
-     systemController                        30806F      43      67       2   .text       
-     updateDisplay                           3080B2      2F      47       2   .text       
-     setFlag                                 3080E1      2C      44       8   .text       
-     Init                                    30810D      29      41       2   .text       
+     main                                    308000      12      18       2   .text       
+     initializeLab                           308012      11      17       2   .text       
+     initSystemClock                         308023      13      19       2   .text       
+     initSystemPorts                         308036      12      18       2   .text       
+     initSystemInterrupts                    308048      16      22       2   .text       
+     compliment                              30805E      15      21       2   .text       
+     systemController                        308073      73     115       2   .text       
+     updateDisplay                           3080E6       B      11       2   .text       
+     updateTimer                             3080F1      25      37       2   .text       
+     setFlag                                 308116      24      36       8   .text       
+     Init                                    30813A      29      41       2   .text       
 
 *********************************************************************************************
 UNUSED-OBJECTS SECTION
@@ -1898,17 +1900,19 @@ checkState                USES _PTH _CRGFLG timer buttonState setFlag
                                 isCounterOnFlagged isCountingUpFlagged isPresetHighFlagged 
                                 isPresetLowFlagged 
 _Vector_7                 USES checkState 
-main                      USES initializeLab systemController updateDisplay 
+main                      USES initializeLab systemController updateTimer 
+                                updateDisplay 
 initializeLab             USES initSystemClock initSystemPorts 
                                 initSystemInterrupts 
 initSystemClock           USES _SYNR _REFDV _CLKSEL _PLLCTL _CRGFLG 
 initSystemPorts           USES _DDRAB _DDRJ _DDRP _PTJ _PTH 
 initSystemInterrupts      USES _CRGINT _RTICTL buttonState 
-systemController          USES isCounterOnFlagged isCounterOn compliment 
-                                isCountingUpFlagged isCountingUp isPresetHighFlagged 
-                                counterUpperLimit counter isPresetLowFlagged counterLowerLimit 
-updateDisplay             USES counter _PORTAB _PTP isCounterOn timer 
-                                isCountingUp 
+systemController          USES isCounterOnFlagged isCounterOn counter 
+                                counterLowerLimit isCountingUp counterUpperLimit 
+                                isCountingUpFlagged compliment isPresetHighFlagged 
+                                isPresetLowFlagged 
+updateDisplay             USES counter _PORTAB _PTP 
+updateTimer               USES isCounterOn timer isCountingUp counter 
 Init                      USES _startupData 
 
 *********************************************************************************************
@@ -1930,6 +1934,8 @@ DEPENDENCY TREE
  |  |  | 
  |  |  +- compliment          
  |  |       
+ |  +- updateTimer         
+ |  |    
  |  +- updateDisplay       
  |       
  +- _Startup            
@@ -1951,5 +1957,5 @@ STATISTIC SECTION
 ExeFile:
 --------
 Number of blocks to be downloaded: 7
-Total size of all blocks to be downloaded: 477
+Total size of all blocks to be downloaded: 522
 

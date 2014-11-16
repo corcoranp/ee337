@@ -82,6 +82,7 @@ void initSystemPorts(void);
 void initSystemInterrupts(void);
 void systemController(void);
 void updateDisplay(void);
+void updateTimer(void);
 bool setFlag(bool currentState, bool *previousState);
 
 //VARS
@@ -119,6 +120,7 @@ void main(void) {
 
    while(true){
       systemController();     //control system...      
+      updateTimer();
       updateDisplay();        //update display with value
    }
 }
@@ -191,29 +193,46 @@ void compliment(bool *val){
    Desc:       Function to control system's functions
 */
 void systemController(){
-      //Start/Stop 
+      
+      //Start/Stop button
       if(isCounterOnFlagged){ //system on/off by button
-         isCounterOnFlagged = false;     //reset flag
-         compliment(&isCounterOn);
-      }else { //system on/off by rule
-         //isCounterOn = !((isCountingUpFlagged==true & counter==counterUpperLimit) || (isCountingUpFlagged==false & counter==counterLowerLimit));
+         isCounterOnFlagged = false; //disable the flag
+         //switch on/off
+         //if on: turn off...
+         if(isCounterOn){ 
+            isCounterOn = false; 
+         } else {
+            //if off:
+            //if at zero going down, don't turn on
+            //if at 255 going up, don't turn on
+            if(!( (counter == counterLowerLimit && !isCountingUp) || 
+               (counter == counterUpperLimit && isCountingUp))){
+               isCounterOn = true;
+            }
+         }
+      }else{
+         //if counter is at the upper or lower limit then turn the counter off.
+         if(counter == counterLowerLimit || counter == counterUpperLimit){
+            isCounterOn = false;
+         }  
       }
+      
       //check for direction change
       if(isCountingUpFlagged){
-         isCountingUpFlagged = false;  // reset flag
+         isCountingUpFlagged = false; //diable the flag
          compliment(&isCountingUp);
-         //isCountingUp != isCountingUp; // flip up counter
       }
       //check for HIGH reset
       if(isPresetHighFlagged){
-         isPresetHighFlagged = false; //reset flag
+         isPresetHighFlagged = false; //diable the flag
          counter = counterUpperLimit;         
       }
       //check for LOW reset
       if(isPresetLowFlagged){
-         isPresetLowFlagged = false; //reset flag
+         isPresetLowFlagged = false; //disable the flag
          counter = counterLowerLimit;
       }
+
 }
 
 
@@ -224,26 +243,33 @@ void systemController(){
    Desc:       Function updates the counter displayed on the LEDs
 */
 void updateDisplay(){
-      
       PORTB = counter;             //display on LEDs
       PTP   = 0x0F; 
-      if(isCounterOn == false){
-         return;                    //Just show on LEDs then return
+}
+
+
+/*
+   Function:   updateTimer
+   Params:     none
+   Return:     none
+   Desc:       Function updates the timer 
+*/
+void updateTimer() {
+   if(!isCounterOn){ //don't update timer if counter isn't on
+      return;
+   }
+   //timer control      
+   if(timer >= timerLimit){     //count
+      if(isCountingUp){          //if counting up, add one
+         counter++;
+      } else {                   //if counting down, minus one
+         counter--;
       }
-      
-      if(timer >= timerLimit ){     //count every 26042 cycles
-         if(isCountingUp){          //if counting up, add one
-            counter++;
-         } else {                   //if counting down, minus one
-            counter--;
-         }
-         timer = 0;                 //reset counter
-      }
+      timer = 0;                 //reset counter
+   }
 }
 
 //#endregion ----------- HELPER METHODS ----------
-
-
 
 
 
@@ -265,87 +291,36 @@ void interrupt VectorNumber_Vrti checkState(void){
   
    CRGFLG = 0X80;          //clear rti flag...
    timer++;                // increase timer value by 1
-
-   /*
-      BUTTON ANALYSIS:
-      CURRENT PREVIOUS
-         0        0     = Disable flag
-         1        1     = Disable flag
-         1        0     = Enable flag & previous
-         0        1     = Disable flag & previous
-   */
-   //BUTTON0 STATE ANALYSIS
-   //If they are equal, disable the flag...   
-   /*if(buttonState.button0Pressed==button0Pressed){
-      isCounterOnFlagged = false;
-   }
-   if(!buttonState.button0Pressed & button0Pressed){
-      buttonState.button0Pressed = isCounterOnFlagged = true;
-   }
-   if(buttonState.button0Pressed & !button0Pressed){
-      buttonState.button0Pressed = isCounterOnFlagged = false;
-   } */
    
    isCounterOnFlagged  = setFlag(button0Pressed, &buttonState.button0Pressed);
    isCountingUpFlagged = setFlag(button1Pressed, &buttonState.button1Pressed);
    isPresetHighFlagged = setFlag(button2Pressed, &buttonState.button2Pressed);
    isPresetLowFlagged  = setFlag(button3Pressed, &buttonState.button3Pressed); 
-   
-   //trigger flags only after 3 interrupts (20ms), and if this is a new press
-   /*
-   if(button0Pressed || button1Pressed || button2Pressed || button3Pressed){
-      iterator++;    //a button is pressed, add 1 to iterator...
-      
-      //check previous button state...
-      if(!(buttonState.button0Pressed==true & button0Pressed==true)){  
-         //new press event
-         buttonState.button0Pressed = button0Pressed;
-      }
-      
-      //trigger only if new press
-      triggerFlag = (iterator > 3); //trigger flag if iterator is greater than 9
-   } 
-   
-   if(triggerFlag){
-      if(button0Pressed) { //Read BIT0 for counter flag 
-         isCounterOnFlagged   = true;
-      }
-      if(button1Pressed) { //Read Bit2 for direction flag  
-         isCountingUpFlagged  = true;
-      }                                                  
-      //up    
-      if(button2Pressed) { 
-         isPresetHighFlagged = true;
-      }
-      //down    
-      if(button3Pressed) { 
-         isPresetLowFlagged = true;
-      }
-      iterator = 0;  //reset iterator...
-   } */
 }
+
+
 #pragma CODE_SEG DEFAULT
+/*
+   BUTTON ANALYSIS:
+   CURRENT PREVIOUS
+      0        0     = Disable flag
+      1        1     = Disable flag
+      1        0     = Enable flag & previous
+      0        1     = Disable flag & previous
+*/
 bool setFlag(bool currentState, bool *previousState){
    if(*previousState==currentState){ //both states are equal = false
       return false;
    }
-   if(!*previousState & currentState){
+   if(!*previousState && currentState){
       return *previousState = true;
    }
-   if(*previousState & !currentState){
+   if(*previousState && !currentState){
       return *previousState = false;
    }
    return false; //always return false
 }
-
-
-
 //#endregion ----------- INTERRUPT CODE ----------
-
-
-
-
-
 
 
 
