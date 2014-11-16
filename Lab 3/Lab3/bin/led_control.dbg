@@ -1,0 +1,371 @@
+;******************************************************************************
+;*                                                                            *
+;*                  .---------------------------------.                       *           
+;*                  |  .---------------------------.  |                       *      
+;*                  |[]|                           |[]|                       *      
+;*                  |  | Name: Peter M. Corcoran   |  |                       *      
+;*                  |  | BlazerID: PMCORCOR        |  |                       *      
+;*                  |  | Program: LCD Control Sys  |  |                       *      
+;*                  |  | Version: 1.0              |  |                       *      
+;*                  |  | Date: September 21, 2014  |  |                       *      
+;*                  |  |                           |  |                       *      
+;*                  |  |                           |  |                       *      
+;*                  |  |                           |  |                       *      
+;*                  |  `---------------------------'  |                       *      
+;*                  |      __________________ _____   |                       *      
+;*                  |     |   ___            |     |  |                       *      
+;*                  |     |  |   |           |     |  |                       *      
+;*                  |     |  |   |           |     |  |                       *      
+;*                  |     |  |   |           |     |  |                       *      
+;*                  |     |  |___|           |     |  |                       *      
+;*                  \_____|__________________|_____|__|                       *
+;*                                                                            *
+;******************************************************************************
+;* Description: LCD Control System                                            *
+;*                                                                            *
+;*  The LCD Control System is a set of functions needed to control the LCD    *
+;*  On the Dragon 12 Plus 2                                                   *
+;*                                                                            *
+;******************************************************************************
+;-----------------------------Include Libraries--------------------------------
+
+;**** Define Public Methods
+      XDEF        LedInitialization
+      XDEF        Display7Segment
+      XDEF        Display7SegmentOff    
+      XDEF        TurnLedsOn
+      XDEF        TurnLedsOff
+      XDEF        SetLedsWithRegisterA
+      XDEF        SetLedsWithRegisterB
+      XDEF        DisplayNumberInD
+           
+;**** DELAY INLUCDES
+      XREF        Delay1s
+      XREF        Delay100ms
+      XREF        Delay20ms
+      XREF        Delay10ms
+      XREF        Delay5ms
+      XREF        Delay1ms
+      XREF        Delay500us
+      XREF        Delay100us
+      XREF        Delay50us      
+      XREF        Delay10us 
+      
+      INCLUDE     'led_pmc.inc' 
+;******************************************************************************
+;*                                                                            *
+;*                  .---------------------------------.                       *           
+;*                  |  .---------------------------.  |                       *      
+;*                  |[]|                           |[]|                       *      
+;*                  |  | Name: Peter M. Corcoran   |  |                       *      
+;*                  |  | BlazerID: PMCORCOR        |  |                       *      
+;*                  |  | Program: Lab 2            |  |                       *      
+;*                  |  | Version: 1.0              |  |                       *      
+;*                  |  | Date: September 8, 2014   |  |                       *      
+;*                  |  |                           |  |                       *      
+;*                  |  |                           |  |                       *      
+;*                  |  |                           |  |                       *      
+;*                  |  `---------------------------'  |                       *      
+;*                  |      __________________ _____   |                       *      
+;*                  |     |   ___            |     |  |                       *      
+;*                  |     |  |   |           |     |  |                       *      
+;*                  |     |  |   |           |     |  |                       *      
+;*                  |     |  |   |           |     |  |                       *      
+;*                  |     |  |___|           |     |  |                       *      
+;*                  \_____|__________________|_____|__|                       *
+;*                                                                            *
+;******************************************************************************
+; Description: Variable setup for the Dragon 12 Plus 2
+;******************************************************************************
+;* GLOBAL DATA CONDITIONING
+;******************************************************************************
+;-----------------------------variable/data section----------------------------
+
+
+;* LED & 7 SEGMENT LED Display
+
+LED7Dec:            EQU     $80           ;7SEG LED at bit 7
+LED6G:              EQU     $40           ;7SEG LED at bit 6
+LED5E:              EQU     $20           ;7SEG LED at bit 5
+LED4E:              EQU     $10           ;7SEG LED at bit 4
+LED3D:              EQU     $08           ;7SEG LED at bit 3
+LED2C:              EQU     $04           ;7SEG LED at bit 2
+LED1B:              EQU     $02           ;7SEG LED at bit 1
+LED0A:              EQU     $01           ;7SEG LED at bit 0
+
+ZERO:               EQU     $3F           ;7SEG Zero
+ONE:                EQU     $06           ;7SEG One
+TWO:                EQU     $5B           ;7SEG Two
+THREE:              EQU     $4F           ;7SEG Three or sideways W  
+FOUR:               EQU     $66           ;7SEG Four
+FIVE:               EQU     $6D           ;7SEG Five
+SIX:                EQU     $7D           ;7SEG Six
+SEVEN:              EQU     $07           ;7SEG Seven
+EIGHT:              EQU     $7F           ;7SEG Eight
+NINE:               EQU     $6F           ;7SEG Nine
+LETA:               EQU     $77           ;7SEG Letter A (HEX 10)
+LETB:               EQU     $5D           ;7SEG Letter B (HEX 11)
+LETC:               EQU     $39           ;7SEG Letter C
+LETD:               EQU     $7C           ;7SEG Letter D
+LETE:               EQU     $79           ;7SEG Letter E
+LETF:               EQU     $71           ;7SEG Letter F
+LETH:               EQU     $76           ;GFE 0CB0 -> 76
+LETL:               EQU     $38           ;0FE D000 ->
+LETP:               EQU     $73           ;7SEG Letter P
+LETt:               EQU     $78           ;7SEG Letter t
+LETn:               EQU     $54           ;7SEG Letter n  G0E 0C00 
+LETY:               EQU     $6E           ;GF0 DCB0
+
+;******************************************************************************
+;* LED and 7 SEGMENT IO PORTS AND DDRJ
+LEDS:               EQU     $00000001     ;LED/7 Segment display Port IO
+LEDS_DIR:           EQU     $00000003     ;LED/7 Segment display in/out dir
+                                          ; 0 = IN
+                                          ; 1 = OUT
+LEDS_SW_DIR:        EQU     $0000026A     ;LED in/out dir 
+                                          ; 0 = IN
+                                          ; 1 = OUT
+LEDS_SW             EQU     $00000268     ;LED/7 Segment Switch
+                                          ; PTJ BIT 1 = LOW  LED ENABLED
+                                          ; PTJ BIT 1 = HIGH LED DISABLED
+
+;******************************************************************************
+;* LED SWITCH CONFIGURATIONS 
+
+ENABLE_LEDS         EQU     $01
+DISABLE_LEDS        EQU     $00
+
+
+;* SEVEN SEGMENT DISPLAYS IO PORTS AND DDRJ
+SEG7_DIGITS:        EQU     $00000258     ;Connected to CATHODES OF 7-SEG 
+                                          ;(DIG0-DIG3) Port P I/O Register
+SEG7_DIGITS_DIR:    EQU     $0000025A     ;PP0 THRU PP3 ENABLE/DISABLE EACH 
+                                          ;DIGIT OF 7SEG DISPALY DDRP
+SEG7_DISP1          EQU     $0E           ;7 segment display 1
+SEG7_DISP2          EQU     $0D           ;7 segment display 2
+SEG7_DISP3          EQU     $0B           ;7 segment display 3
+SEG7_DISP4          EQU     $07           ;7 segment display 4
+SEG7_DISP_OFF       EQU     $0F 
+          
+
+
+
+
+
+
+
+
+      
+      
+;******************************************************************************
+;* Description: LED Control System                                            *
+;******************************************************************************
+;-----------------------------variable/data section----------------------------
+
+
+DISP1_VAL:        DS.B     1              ;Word value to display in 1
+DISP2_VAL:        DS.B     1              ;Word value to display in 2
+DISP3_VAL:        DS.B     1              ;Word value to display in 3
+DISP4_VAL:        DS.B     1              ;Word value to display in 4     
+DISP_TEMP:        DS.B     1              ;Temp variable for display use
+INDEX             DS.B     1
+
+;Number array: contains 7segment numbers in value placeholder
+NUMARR:           DC.B     $3F,$06,$5B,$4F,$66,$6D,$7D,$07,$7F,$6F;
+
+
+
+
+
+;******************************************************************************
+;* LED Controller Code Section                                                *
+;******************************************************************************
+;-----------------------------code section-------------------------------------
+LED_CONTROLLER_CODE:    SECTION
+     
+      
+;******************************************************************************
+;* LED Initialization function                                                *  
+;******************************************************************************
+;* LedInitialization                                                          *
+;*  [DESCRIPTION]
+;*    Sub-Routine initializes the LEDs on the DRAGON 12 Plus 2. This function
+;*    sets the leds as outputs, and enables them.  It also initializes the 
+;*    7segement display   
+;*
+;*  [ARGUMENTS]
+;*    - NONE
+;*
+;*  [RETURNS]
+;*    - NONE
+;*                                                                            *
+;******************************************************************************     
+LedInitialization:
+      ;*** LEDs DATA DIRECTION (AND 7 SEGMENT DISPLAY)
+      MOVB        #$FF ,LEDS_DIR          ;Make Port B an output port
+    
+      ;*** LED Switch (Pin 1 low=enabled high=disable)
+      MOVB        #$FF ,LEDS_SW_DIR       ;Make Port J an output port
+    
+      ;*** 7 SEGMENT DATA DIRECTION
+      MOVB        #$FF ,SEG7_DIGITS_DIR   ;Make Port P an output port
+      
+      
+   RTS
+
+
+;******************************************************************************
+;* SetLedsWithRegisterA                                                       *  
+;******************************************************************************
+;* SetLedsWithRegisterA                                                       *
+;*  [DESCRIPTION]
+;*    Turn Leds using Register A as pattern   
+;*
+;*  [ARGUMENTS]
+;*    - REGISTER A should be set with pattern
+;*
+;*  [RETURNS]
+;*    - NONE
+;*                                                                            *
+;****************************************************************************** 
+SetLedsWithRegisterA:
+      STAA        LEDS
+      JSR         TurnLedsOn
+   RTS
+;******************************************************************************
+;* SetLedsWithRegisterB                                                       *  
+;******************************************************************************
+;* SetLedsWithRegisterB                                                       *
+;*  [DESCRIPTION]
+;*    Turn Leds using Register B as pattern   
+;*
+;*  [ARGUMENTS]
+;*    - REGISTER B should be set with pattern
+;*
+;*  [RETURNS]
+;*    - NONE
+;*                                                                            *
+;****************************************************************************** 
+SetLedsWithRegisterB:
+      STAB        LEDS
+      JSR         TurnLedsOn
+   RTS
+
+;******************************************************************************
+;* Display7Segment                                                            *  
+;******************************************************************************
+;* LedInitialization                                                          *
+;*  [DESCRIPTION]
+;*    Method for displaying items on the 7-Segment Display
+;*
+;*  [ARGUMENTS]
+;*    - NONE
+;*
+;*  [RETURNS]
+;*    - NONE
+;*                                                                            *
+;******************************************************************************  
+Display7Segment:
+      MOVB        DISP1_VAL      ,LEDS          ;Show what's in display 1 value
+      MOVB        #SEG7_DISP1    ,SEG7_DIGITS   ;ENABLE display 1
+      JSR         Delay20ms    
+      MOVB        DISP2_VAL      ,LEDS          ;Show what's in display 2 value
+      MOVB        #SEG7_DISP2    ,SEG7_DIGITS   ;ENABLE display 2
+      JSR         Delay20ms
+      MOVB        DISP3_VAL      ,LEDS          ;Show what's in display 3 value
+      MOVB        #SEG7_DISP3    ,SEG7_DIGITS   ;ENABLE display 3
+      JSR         Delay20ms        
+      MOVB        DISP4_VAL      ,LEDS          ;Show what's in display 4 value
+      MOVB        #SEG7_DISP4    ,SEG7_DIGITS   ;ENABLE display 4
+      JSR         Delay20ms                          ;Wait 1ms  
+  
+  RTS
+
+
+
+
+
+DisplayNumberInD:
+;      PSHX
+;      LDY   NUMARR ;load with address of number array
+;store x, y, d
+;load x with 10
+;divide d by x
+;store remainder 
+;convert BCD to 7seg 
+;set disp4 with seg value
+;      LDX   #$02
+;      IDIV
+;      STAB  INDEX
+;      MOVB  INDEX,Y, SEG7_DISP3
+      
+;load x to d  
+;load x with 10
+;divide d by x
+;store remainder (d) in disp3
+;load x to d  
+;load x with 10
+;divide d by x
+;store remainder (d) in disp2
+;load x to d  
+;load x with 10
+;divide d by x
+;store remainder (d) in disp1
+;call Display7Segment....
+;      JSR Display7Segment
+;      PULX
+;      RTS
+
+;******************************************************************************
+;* Display7SegmentOff                                                         *  
+;******************************************************************************
+;* LedInitialization                                                          *
+;*  [DESCRIPTION]
+;*    Method for disabling the 7-Segment Display
+;*
+;*  [ARGUMENTS]
+;*    - NONE
+;*
+;*  [RETURNS]
+;*    - NONE
+;*                                                                            *
+;****************************************************************************** 
+Display7SegmentOff:
+      MOVB        #SEG7_DISP_OFF ,SEG7_DIGITS   ;Turn off the displays
+  RTS
+
+
+;******************************************************************************
+;* TURN LEDs ON|OFF                                                           *  
+;******************************************************************************
+;* LedInitialization                                                          *
+;*  [DESCRIPTION]
+;*    Funtions for turning on or off the Leds
+;*
+;*  [ARGUMENTS]
+;*    - NONE
+;*
+;*  [RETURNS]
+;*    - NONE
+;*                                                                            *
+;******************************************************************************
+TurnLedsOn:
+      BCLR        LEDS_SW        ,$02        ;TURN LEDS ON
+   RTS
+
+TurnLedsOff:
+      BSET        LEDS_SW        ,$02        ;TURN LEDS OFF
+   RTS
+
+
+END
+  
+;******************************************************************************
+;*   ___      __                                                              *
+;*  | _ \___ / _|___ _ _ ___ _ _  __ ___ ___                                  *
+;*  |   / -_)  _/ -_) '_/ -_) ' \/ _/ -_|_-<                                  *
+;*  |_|_\___|_| \___|_| \___|_||_\__\___/__/                                  *
+;******************************************************************************
+;*                                                                            *
+;******************************************************************************
+

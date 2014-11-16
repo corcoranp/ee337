@@ -1,0 +1,127 @@
+*** EVALUATION ***
+PROGRAM "C:\Users\PeterM\Dropbox\School\UAB\2014 - Fall\EE337 - Micros\Lab 1\lab1_fixed\bin\Project.absHCS12_Serial_Monitor.abs"
+
+*********************************************************************************************
+TARGET SECTION
+---------------------------------------------------------------------------------------------
+Processor   : Freescale HC12
+Memory Model: SMALL
+File Format : ELF\DWARF 2.0
+Linker      : SmartLinker V-5.0.40 Build 10203, Jul 23 2010
+
+*********************************************************************************************
+FILE SECTION
+---------------------------------------------------------------------------------------------
+main.asm.o                              Model: SMALL,         Lang: Assembler
+
+*********************************************************************************************
+STARTUP SECTION
+---------------------------------------------------------------------------------------------
+Entry point: 0xC000 (Entry)
+
+*********************************************************************************************
+SECTION-ALLOCATION SECTION
+Section Name                    Size  Type     From       To       Segment
+---------------------------------------------------------------------------------------------
+.init                            212     R     0xC000     0xC0D3   ROM_C000
+.stack                           256   R/W     0x1000     0x10FF   RAM
+main.asm__ORG00001                 1   R/W     0x1100     0x1100   .absSeg0
+.vectSeg1_vect                     2     R     0xFFFE     0xFFFF   .vectSeg1
+
+Summary of section sizes per section type:
+READ_ONLY (R):          D6 (dec:      214)
+READ_WRITE (R/W):      101 (dec:      257)
+
+*********************************************************************************************
+VECTOR-ALLOCATION SECTION
+    Address     InitValue   InitFunction
+---------------------------------------------------------------------------------------------
+     0xFFFE        0xC000   Entry
+
+*********************************************************************************************
+OBJECT-ALLOCATION SECTION
+     Name               Module                 Addr   hSize   dSize     Ref    Section   RLIB
+---------------------------------------------------------------------------------------------
+MODULE:                 -- main.asm.o --
+- PROCEDURES:
+     Entry                                     C000      2B      43       0   .init       
+     MAIN                                      C000       0       0       0   .init       
+     MAINLOOP                                  C02B      4C      76       0   .init       
+     GET_ENABLED_LEDs                          C077       F      15       0   .init       
+     CASE_BUTTON1                              C086       B      11       0   .init       
+     CASE_BUTTON2                              C091       B      11       0   .init       
+     CASE_BUTTON3                              C09C       B      11       0   .init       
+     SW_BUTTON_FINALLY                         C0A7       6       6       0   .init       
+     DELAY                                     C0AD       6       6       5   .init       
+     L3                                        C0B3       5       5       0   .init       
+     L2                                        C0B8       5       5       0   .init       
+     L1                                        C0BD      14      20       0   .init       
+     GRACEFULLY_END                            C0D1       3       3       0   .init       
+- VARIABLES:
+     CURRENT_LED                               1100       1       1       0   .text       
+- LABELS:
+     __SEG_END_SSTACK                          1100       0       0       1               
+
+*********************************************************************************************
+MODULE STATISTIC
+  Name                                      Data   Code  Const
+---------------------------------------------------------------------------------------------
+  main.asm.o                                   1    212      0
+  other                                      256      2      0
+
+*********************************************************************************************
+SECTION USE IN OBJECT-ALLOCATION SECTION
+---------------------------------------------------------------------------------------------
+SECTION: ".text"
+  CURRENT_LED 
+SECTION: ".init"
+  MAIN Entry MAINLOOP GET_ENABLED_LEDs CASE_BUTTON1 CASE_BUTTON2 CASE_BUTTON3 
+  SW_BUTTON_FINALLY DELAY L3 L2 L1 GRACEFULLY_END 
+
+*********************************************************************************************
+OBJECT LIST SORTED BY ADDRESS
+     Name                                      Addr   hSize   dSize     Ref    Section   RLIB
+---------------------------------------------------------------------------------------------
+     CURRENT_LED                               1100       1       1       0   .text       
+     MAIN                                      C000       0       0       0   .init       
+     Entry                                     C000      2B      43       0   .init       
+     MAINLOOP                                  C02B      4C      76       0   .init       
+     GET_ENABLED_LEDs                          C077       F      15       0   .init       
+     CASE_BUTTON1                              C086       B      11       0   .init       
+     CASE_BUTTON2                              C091       B      11       0   .init       
+     CASE_BUTTON3                              C09C       B      11       0   .init       
+     SW_BUTTON_FINALLY                         C0A7       6       6       0   .init       
+     DELAY                                     C0AD       6       6       5   .init       
+     L3                                        C0B3       5       5       0   .init       
+     L2                                        C0B8       5       5       0   .init       
+     L1                                        C0BD      14      20       0   .init       
+     GRACEFULLY_END                            C0D1       3       3       0   .init       
+
+*********************************************************************************************
+UNUSED-OBJECTS SECTION
+---------------------------------------------------------------------------------------------
+
+*********************************************************************************************
+COPYDOWN SECTION
+---------------------------------------------------------------------------------------------
+
+*********************************************************************************************
+OBJECT-DEPENDENCIES SECTION
+---------------------------------------------------------------------------------------------
+Entry                     USES __SEG_END_SSTACK 
+MAINLOOP                  USES DELAY 
+
+*********************************************************************************************
+DEPENDENCY TREE
+*********************************************************************************************
+ Entry               
+   
+*********************************************************************************************
+STATISTIC SECTION
+---------------------------------------------------------------------------------------------
+
+ExeFile:
+--------
+Number of blocks to be downloaded: 2
+Total size of all blocks to be downloaded: 214
+

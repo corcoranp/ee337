@@ -1,0 +1,356 @@
+*** EVALUATION ***
+PROGRAM "H:\Dropbox\School\UAB\2014 - Fall\EE337 - Micros\Lab 3\Lab3\bin\Project.absHCS12_Serial_Monitor.abs"
+
+*********************************************************************************************
+TARGET SECTION
+---------------------------------------------------------------------------------------------
+Processor   : Freescale HC12
+Memory Model: SMALL
+File Format : ELF\DWARF 2.0
+Linker      : SmartLinker V-5.0.40 Build 10203, Jul 23 2010
+
+*********************************************************************************************
+FILE SECTION
+---------------------------------------------------------------------------------------------
+main.asm.o                              Model: SMALL,         Lang: Assembler
+button_control.asm.o                    Model: SMALL,         Lang: Assembler
+delays.asm.o                            Model: SMALL,         Lang: Assembler
+lcd_control.asm.o                       Model: SMALL,         Lang: Assembler
+led_control.asm.o                       Model: SMALL,         Lang: Assembler
+
+*********************************************************************************************
+STARTUP SECTION
+---------------------------------------------------------------------------------------------
+Entry point: 0xC000 (Entry)
+
+*********************************************************************************************
+SECTION-ALLOCATION SECTION
+Section Name                    Size  Type     From       To       Segment
+---------------------------------------------------------------------------------------------
+.init                            144     R     0xC000     0xC08F   ROM_C000
+.stack                           256   R/W     0x1000     0x10FF   RAM
+main.asm__ORG00001                 2   R/W     0x2000     0x2001   .absSeg0
+main.asm__ORG00002                 5     R     0xFFCC     0xFFD0   .absSeg1
+PHBUTTONS_CONTROLLER_CODE          6     R   0x308000   0x308005   PAGE_30
+DELAY_CODE_SECTION               103     R   0x308006   0x30806C   PAGE_30
+LCD_CONTROLLER_CODE              283     R   0x30806D   0x308187   PAGE_30
+lcd_control.asm._SEC000000          2   R/W     0x1100     0x1101   RAM
+led_control.asm._SEC000000         16     R     0xC090     0xC09F   ROM_C000
+LED_CONTROLLER_CODE              101     R   0x308188   0x3081EC   PAGE_30
+.vectSeg2_vect                     2     R     0xFFFE     0xFFFF   .vectSeg2
+
+Summary of section sizes per section type:
+READ_ONLY (R):         294 (dec:      660)
+READ_WRITE (R/W):      104 (dec:      260)
+
+*********************************************************************************************
+VECTOR-ALLOCATION SECTION
+    Address     InitValue   InitFunction
+---------------------------------------------------------------------------------------------
+     0xFFFE        0xC000   Entry
+
+*********************************************************************************************
+OBJECT-ALLOCATION SECTION
+     Name               Module                 Addr   hSize   dSize     Ref    Section   RLIB
+---------------------------------------------------------------------------------------------
+MODULE:                 -- main.asm.o --
+- PROCEDURES:
+     Entry                                     C000      1D      29       0   .init       
+     MAIN                                      C000       0       0       0   .init       
+     MAINLOOP                                  C01D       2       2       0   .init       
+     InitPorts                                 C01F      27      39       0   .init       
+     Button1Push                               C046       5       5       0   .init       
+     Button2Push                               C04B       E      14       0   .init       
+     Button3Push                               C059       E      14       0   .init       
+     Button4Push                               C067       E      14       0   .init       
+     ClearCount                                C075       3       3       0   .init       
+     IRQ_ISR                                   C078      18      24       1   .init       
+     VAR00001                                  FFCC       2       2       0   .text       
+     GRACEFULLY_END                            FFCE       3       3       0   .text       
+- VARIABLES:
+     COUNT                                     2000       1       1       0   .text       
+     ACTION_DIR                                2001       1       1       0   .text       
+- LABELS:
+     __SEG_END_SSTACK                          1100       0       0       1               
+MODULE:                 -- button_control.asm.o --
+- PROCEDURES:
+     SwitchButtonInitialization              308000       6       6       1   PHBUTTONS_CONTROLLER_CODE
+- VARIABLES:
+- LABELS:
+     KeyPressed                                  10       0       0       0   .text       
+MODULE:                 -- delays.asm.o --
+- PROCEDURES:
+     Delay1s                                 308006       4       4       0   DELAY_CODE_SECTION
+     dlay1s                                  30800A       7       7       0   DELAY_CODE_SECTION
+     Delay500ms                              308011       4       4       0   DELAY_CODE_SECTION
+     dlay500ms                               308015       7       7       0   DELAY_CODE_SECTION
+     Delay100ms                              30801C       4       4       1   DELAY_CODE_SECTION
+     dlay100ms                               308020       7       7       0   DELAY_CODE_SECTION
+     Delay20ms                               308027       8       8       7   DELAY_CODE_SECTION
+     Delay10ms                               30802F       8       8       0   DELAY_CODE_SECTION
+     Delay5ms                                308037       8       8       1   DELAY_CODE_SECTION
+     Delay1ms                                30803F       8       8       0   DELAY_CODE_SECTION
+     Delay500us                              308047       8       8       0   DELAY_CODE_SECTION
+     Delay100us                              30804F       8       8       0   DELAY_CODE_SECTION
+     Delay50us                               308057       8       8       1   DELAY_CODE_SECTION
+     Delay10us                               30805F       8       8       0   DELAY_CODE_SECTION
+     Delay250ns                              308067       6       6       0   DELAY_CODE_SECTION
+- VARIABLES:
+MODULE:                 -- lcd_control.asm.o --
+- PROCEDURES:
+     VAR00001                                30806D       1       1       1   LCD_CONTROLLER_CODE
+     VAR00002                                30806E       1       1       0   LCD_CONTROLLER_CODE
+     VAR00003                                30806F       1       1       0   LCD_CONTROLLER_CODE
+     VAR00004                                308070       1       1       0   LCD_CONTROLLER_CODE
+     VAR00005                                308071       1       1       0   LCD_CONTROLLER_CODE
+     VAR00006                                308072       1       1       0   LCD_CONTROLLER_CODE
+     VAR00007                                308073       1       1       0   LCD_CONTROLLER_CODE
+     VAR00008                                308074       1       1       0   LCD_CONTROLLER_CODE
+     VAR00009                                308075       1       1       0   LCD_CONTROLLER_CODE
+     VAR00010                                308076       1       1       0   LCD_CONTROLLER_CODE
+     VAR00011                                308077       1       1       0   LCD_CONTROLLER_CODE
+     VAR00012                                308078       1       1       0   LCD_CONTROLLER_CODE
+     VAR00013                                308079       1       1       0   LCD_CONTROLLER_CODE
+     LcdInitialization                       30807A      14      20       1   LCD_CONTROLLER_CODE
+     nextInitInstruction                     30808E       E      14       0   LCD_CONTROLLER_CODE
+     ExecuteLcdCommand                       30809C      19      25       1   LCD_CONTROLLER_CODE
+     SelectData                              3080B5       8       8       1   LCD_CONTROLLER_CODE
+     SelectInstruction                       3080BD       6       6       3   LCD_CONTROLLER_CODE
+     SelectInstructionFinal                  3080C3       7       7       0   LCD_CONTROLLER_CODE
+     WriteLine1                              3080CA       7       7       1   LCD_CONTROLLER_CODE
+     WriteLine2                              3080D1       5       5       1   LCD_CONTROLLER_CODE
+     WriteLineFinal                          3080D6       6       6       0   LCD_CONTROLLER_CODE
+     MessageOutputLoop                       3080DC      19      25       0   LCD_CONTROLLER_CODE
+     KeyDelayFX                              3080F5       5       5       0   LCD_CONTROLLER_CODE
+     ScrollFX                                3080FA       2       2       0   LCD_CONTROLLER_CODE
+     NoFX                                    3080FC       C      12       0   LCD_CONTROLLER_CODE
+     WriteByte                               308108      32      50       2   LCD_CONTROLLER_CODE
+     SetEnable                               30813A      11      17       1   LCD_CONTROLLER_CODE
+     SetLcdFxOff                             30814B       7       7       1   LCD_CONTROLLER_CODE
+     SetLcdFxTextDelay                       308152       7       7       0   LCD_CONTROLLER_CODE
+     ClearDisplay                            308159       D      13       0   LCD_CONTROLLER_CODE
+     LcdWriteLine1                           308166       9       9       1   LCD_CONTROLLER_CODE
+     LcdWriteLine2                           30816F       9       9       1   LCD_CONTROLLER_CODE
+     EmptyString                             308178      10      16       2   LCD_CONTROLLER_CODE
+- VARIABLES:
+     tempStorage                               1100       1       1       6   lcd_control.asm._SEC000000
+     CmdStorage                                1101       1       1       9   lcd_control.asm._SEC000000
+MODULE:                 -- led_control.asm.o --
+- PROCEDURES:
+     LedInitialization                       308188      10      16       1   LED_CONTROLLER_CODE
+     SetLedsWithRegisterA                    308198       6       6       0   LED_CONTROLLER_CODE
+     SetLedsWithRegisterB                    30819E       6       6       0   LED_CONTROLLER_CODE
+     Display7Segment                         3081A4      39      57       0   LED_CONTROLLER_CODE
+     Display7SegmentOff                      3081DD       6       6       0   LED_CONTROLLER_CODE
+     DisplayNumberInD                        3081DD       0       0       0   LED_CONTROLLER_CODE
+     TurnLedsOn                              3081E3       5       5       2   LED_CONTROLLER_CODE
+     TurnLedsOff                             3081E8       5       5       0   LED_CONTROLLER_CODE
+- VARIABLES:
+     DISP1_VAL                                 C090       1       1       1   led_control.asm._SEC000000
+     DISP2_VAL                                 C091       1       1       1   led_control.asm._SEC000000
+     DISP3_VAL                                 C092       1       1       1   led_control.asm._SEC000000
+     DISP4_VAL                                 C093       1       1       1   led_control.asm._SEC000000
+     DISP_TEMP                                 C094       1       1       0   led_control.asm._SEC000000
+     INDEX                                     C095       1       1       0   led_control.asm._SEC000000
+     NUMARR                                    C096       A      10       0   led_control.asm._SEC000000
+
+*********************************************************************************************
+MODULE STATISTIC
+  Name                                      Data   Code  Const
+---------------------------------------------------------------------------------------------
+  main.asm.o                                   2    149      0
+  button_control.asm.o                         0      6      0
+  delays.asm.o                                 0    103      0
+  lcd_control.asm.o                            2    283      0
+  led_control.asm.o                            0    101     16
+  other                                      256      2      0
+
+*********************************************************************************************
+SECTION USE IN OBJECT-ALLOCATION SECTION
+---------------------------------------------------------------------------------------------
+SECTION: ".text"
+  KeyPressed COUNT ACTION_DIR VAR00001 GRACEFULLY_END 
+SECTION: ".init"
+  MAIN Entry MAINLOOP InitPorts Button1Push Button2Push Button3Push 
+  Button4Push ClearCount IRQ_ISR 
+SECTION: "PHBUTTONS_CONTROLLER_CODE"
+  SwitchButtonInitialization 
+SECTION: "DELAY_CODE_SECTION"
+  Delay1s dlay1s Delay500ms dlay500ms Delay100ms dlay100ms Delay20ms Delay10ms 
+  Delay5ms Delay1ms Delay500us Delay100us Delay50us Delay10us Delay250ns 
+SECTION: "LCD_CONTROLLER_CODE"
+  VAR00001 VAR00002 VAR00003 VAR00004 VAR00005 VAR00006 VAR00007 VAR00008 
+  VAR00009 VAR00010 VAR00011 VAR00012 VAR00013 LcdInitialization 
+  nextInitInstruction ExecuteLcdCommand SelectData SelectInstruction 
+  SelectInstructionFinal WriteLine1 WriteLine2 WriteLineFinal MessageOutputLoop 
+  KeyDelayFX ScrollFX NoFX WriteByte SetEnable SetLcdFxOff SetLcdFxTextDelay 
+  ClearDisplay LcdWriteLine1 LcdWriteLine2 EmptyString 
+SECTION: "lcd_control.asm._SEC000000"
+  tempStorage CmdStorage 
+SECTION: "led_control.asm._SEC000000"
+  DISP1_VAL DISP2_VAL DISP3_VAL DISP4_VAL DISP_TEMP INDEX NUMARR 
+SECTION: "LED_CONTROLLER_CODE"
+  LedInitialization SetLedsWithRegisterA SetLedsWithRegisterB Display7Segment 
+  DisplayNumberInD Display7SegmentOff TurnLedsOn TurnLedsOff 
+
+*********************************************************************************************
+OBJECT LIST SORTED BY ADDRESS
+     Name                                      Addr   hSize   dSize     Ref    Section   RLIB
+---------------------------------------------------------------------------------------------
+     KeyPressed                                  10       0       0       0   .text       
+     tempStorage                               1100       1       1       6   lcd_control.asm._SEC000000
+     CmdStorage                                1101       1       1       9   lcd_control.asm._SEC000000
+     COUNT                                     2000       1       1       0   .text       
+     ACTION_DIR                                2001       1       1       0   .text       
+     MAIN                                      C000       0       0       0   .init       
+     Entry                                     C000      1D      29       0   .init       
+     MAINLOOP                                  C01D       2       2       0   .init       
+     InitPorts                                 C01F      27      39       0   .init       
+     Button1Push                               C046       5       5       0   .init       
+     Button2Push                               C04B       E      14       0   .init       
+     Button3Push                               C059       E      14       0   .init       
+     Button4Push                               C067       E      14       0   .init       
+     ClearCount                                C075       3       3       0   .init       
+     IRQ_ISR                                   C078      18      24       1   .init       
+     DISP1_VAL                                 C090       1       1       1   led_control.asm._SEC000000
+     DISP2_VAL                                 C091       1       1       1   led_control.asm._SEC000000
+     DISP3_VAL                                 C092       1       1       1   led_control.asm._SEC000000
+     DISP4_VAL                                 C093       1       1       1   led_control.asm._SEC000000
+     DISP_TEMP                                 C094       1       1       0   led_control.asm._SEC000000
+     INDEX                                     C095       1       1       0   led_control.asm._SEC000000
+     NUMARR                                    C096       A      10       0   led_control.asm._SEC000000
+     VAR00001                                  FFCC       2       2       0   .text       
+     GRACEFULLY_END                            FFCE       3       3       0   .text       
+     SwitchButtonInitialization              308000       6       6       1   PHBUTTONS_CONTROLLER_CODE
+     Delay1s                                 308006       4       4       0   DELAY_CODE_SECTION
+     dlay1s                                  30800A       7       7       0   DELAY_CODE_SECTION
+     Delay500ms                              308011       4       4       0   DELAY_CODE_SECTION
+     dlay500ms                               308015       7       7       0   DELAY_CODE_SECTION
+     Delay100ms                              30801C       4       4       1   DELAY_CODE_SECTION
+     dlay100ms                               308020       7       7       0   DELAY_CODE_SECTION
+     Delay20ms                               308027       8       8       7   DELAY_CODE_SECTION
+     Delay10ms                               30802F       8       8       0   DELAY_CODE_SECTION
+     Delay5ms                                308037       8       8       1   DELAY_CODE_SECTION
+     Delay1ms                                30803F       8       8       0   DELAY_CODE_SECTION
+     Delay500us                              308047       8       8       0   DELAY_CODE_SECTION
+     Delay100us                              30804F       8       8       0   DELAY_CODE_SECTION
+     Delay50us                               308057       8       8       1   DELAY_CODE_SECTION
+     Delay10us                               30805F       8       8       0   DELAY_CODE_SECTION
+     Delay250ns                              308067       6       6       0   DELAY_CODE_SECTION
+     VAR00001                                30806D       1       1       1   LCD_CONTROLLER_CODE
+     VAR00002                                30806E       1       1       0   LCD_CONTROLLER_CODE
+     VAR00003                                30806F       1       1       0   LCD_CONTROLLER_CODE
+     VAR00004                                308070       1       1       0   LCD_CONTROLLER_CODE
+     VAR00005                                308071       1       1       0   LCD_CONTROLLER_CODE
+     VAR00006                                308072       1       1       0   LCD_CONTROLLER_CODE
+     VAR00007                                308073       1       1       0   LCD_CONTROLLER_CODE
+     VAR00008                                308074       1       1       0   LCD_CONTROLLER_CODE
+     VAR00009                                308075       1       1       0   LCD_CONTROLLER_CODE
+     VAR00010                                308076       1       1       0   LCD_CONTROLLER_CODE
+     VAR00011                                308077       1       1       0   LCD_CONTROLLER_CODE
+     VAR00012                                308078       1       1       0   LCD_CONTROLLER_CODE
+     VAR00013                                308079       1       1       0   LCD_CONTROLLER_CODE
+     LcdInitialization                       30807A      14      20       1   LCD_CONTROLLER_CODE
+     nextInitInstruction                     30808E       E      14       0   LCD_CONTROLLER_CODE
+     ExecuteLcdCommand                       30809C      19      25       1   LCD_CONTROLLER_CODE
+     SelectData                              3080B5       8       8       1   LCD_CONTROLLER_CODE
+     SelectInstruction                       3080BD       6       6       3   LCD_CONTROLLER_CODE
+     SelectInstructionFinal                  3080C3       7       7       0   LCD_CONTROLLER_CODE
+     WriteLine1                              3080CA       7       7       1   LCD_CONTROLLER_CODE
+     WriteLine2                              3080D1       5       5       1   LCD_CONTROLLER_CODE
+     WriteLineFinal                          3080D6       6       6       0   LCD_CONTROLLER_CODE
+     MessageOutputLoop                       3080DC      19      25       0   LCD_CONTROLLER_CODE
+     KeyDelayFX                              3080F5       5       5       0   LCD_CONTROLLER_CODE
+     ScrollFX                                3080FA       2       2       0   LCD_CONTROLLER_CODE
+     NoFX                                    3080FC       C      12       0   LCD_CONTROLLER_CODE
+     WriteByte                               308108      32      50       2   LCD_CONTROLLER_CODE
+     SetEnable                               30813A      11      17       1   LCD_CONTROLLER_CODE
+     SetLcdFxOff                             30814B       7       7       1   LCD_CONTROLLER_CODE
+     SetLcdFxTextDelay                       308152       7       7       0   LCD_CONTROLLER_CODE
+     ClearDisplay                            308159       D      13       0   LCD_CONTROLLER_CODE
+     LcdWriteLine1                           308166       9       9       1   LCD_CONTROLLER_CODE
+     LcdWriteLine2                           30816F       9       9       1   LCD_CONTROLLER_CODE
+     EmptyString                             308178      10      16       2   LCD_CONTROLLER_CODE
+     LedInitialization                       308188      10      16       1   LED_CONTROLLER_CODE
+     SetLedsWithRegisterA                    308198       6       6       0   LED_CONTROLLER_CODE
+     SetLedsWithRegisterB                    30819E       6       6       0   LED_CONTROLLER_CODE
+     Display7Segment                         3081A4      39      57       0   LED_CONTROLLER_CODE
+     DisplayNumberInD                        3081DD       0       0       0   LED_CONTROLLER_CODE
+     Display7SegmentOff                      3081DD       6       6       0   LED_CONTROLLER_CODE
+     TurnLedsOn                              3081E3       5       5       2   LED_CONTROLLER_CODE
+     TurnLedsOff                             3081E8       5       5       0   LED_CONTROLLER_CODE
+
+*********************************************************************************************
+UNUSED-OBJECTS SECTION
+---------------------------------------------------------------------------------------------
+NOT USED PROCEDURES
+button_control.asm.o:
+  KeypadInitialization WaitForKeypadPress ScanKeypad conditionVars iteration 
+  T2 T3 T4 EVAL debounce noKeyPress onKeyPress exitScanKeypad PutKeyPressedInA 
+  PutKeyPressedInB PutKeyPressedInX PutKeyPressedInY 
+NOT USED VARIABLES
+main.asm.o:
+  AUTHOR EMPTY MENU_WELCOME MAINMENU MAINMENU1 MAINMENU2 MAINMENU3 MAINMENU4 
+  MAINMENU5 MENULAB0 MENULAB1 MENULAB2 MENULAB3 PRESS2CONTINUE 
+button_control.asm.o:
+  KEYS 
+
+*********************************************************************************************
+COPYDOWN SECTION
+---------------------------------------------------------------------------------------------
+
+*********************************************************************************************
+OBJECT-DEPENDENCIES SECTION
+---------------------------------------------------------------------------------------------
+Entry                     USES __SEG_END_SSTACK LedInitialization 
+                                LcdInitialization SetLcdFxOff SwitchButtonInitialization 
+LcdInitialization         USES VAR00001 SelectInstruction 
+nextInitInstruction       USES ExecuteLcdCommand Delay5ms 
+ExecuteLcdCommand         USES tempStorage CmdStorage SetEnable 
+SelectData                USES CmdStorage 
+SelectInstruction         USES CmdStorage 
+SelectInstructionFinal    USES CmdStorage 
+WriteLine1                USES SelectInstruction 
+WriteLine2                USES SelectInstruction 
+WriteLineFinal            USES WriteByte SelectData 
+KeyDelayFX                USES Delay100ms 
+NoFX                      USES Delay20ms WriteByte 
+WriteByte                 USES tempStorage CmdStorage Delay50us 
+ClearDisplay              USES EmptyString LcdWriteLine1 LcdWriteLine2 
+LcdWriteLine1             USES WriteLine1 Delay20ms 
+LcdWriteLine2             USES WriteLine2 Delay20ms 
+SetLedsWithRegisterA      USES TurnLedsOn 
+SetLedsWithRegisterB      USES TurnLedsOn 
+Display7Segment           USES DISP1_VAL Delay20ms DISP2_VAL DISP3_VAL 
+                                DISP4_VAL 
+
+*********************************************************************************************
+DEPENDENCY TREE
+*********************************************************************************************
+ Entry               
+ | 
+ +- LedInitialization   
+ |    
+ +- LcdInitialization   
+ |  | 
+ |  +- VAR00001            
+ |  |    
+ |  +- SelectInstruction   
+ |       
+ +- SetLcdFxOff         
+ |    
+ +- SwitchButtonInitialization
+      
+ _ORG00002           
+ | 
+ +- IRQ_ISR             
+      
+*********************************************************************************************
+STATISTIC SECTION
+---------------------------------------------------------------------------------------------
+
+ExeFile:
+--------
+Number of blocks to be downloaded: 7
+Total size of all blocks to be downloaded: 660
+
