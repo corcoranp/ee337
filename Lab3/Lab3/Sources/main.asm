@@ -35,12 +35,12 @@
 ;     Interrupts are 'fired'  when an event occurs
 
 ;  2. Describe the purpose of each of the following things: 
-;     PPSH, 
-;     PIEH, 
-;     PIFH, 
-;     SEI, 
-;     CLI, 
-;     RTI. 
+;     PPSH: Port Polarity Select register 
+;     PIEH: Port H Interrupt Enable register (PIEH) 
+;     PIFH: Port H Interrupt Flag register (PIFH)
+;     SEI:  Set interrupt mask, turns maskable interrupts off 
+;     CLI: Clear interrupt mask, enables maskable interrupts 
+;     RTI: Return from interrupt 
 
 
 
@@ -317,19 +317,28 @@ GRACEFULLY_END:
 ;******************************************************************************
 ;* QUESTIONS TO BE ANSWERED IN COMMENTS AT THE END OF YOUR CODE               *
 ;1) Why are interrupts important?
+;  Interrupts can be used when blocking is unwanted.
+
 ;2) What does the interrupt vector used for?
+;  interrupt vestor is the address of the function that should be called
+;  when the interrupts is fired
+
 ;3) Why are priorities important?
+;   Since multiple interrupts can occur in the same timeframe, priorities 
+;     sort out which goes first.
+
 ;4) What is an ISR?
+;   Interrupt service routine
+   
 ;5) What is ‘Blocking’?
+;  Blocking is when a program waits until some processing is completed before
+;  moving on to another call
+
 ;6) Why do you not ‘block’ within an interrupt service routine?
+;     If you block during an interrupt, other interrupts queue up,
+;     you could miss something you are waiting for.
 
 
-;******************************************************************************
-;*   ___      __                                                              *
-;*  | _ \___ / _|___ _ _ ___ _ _  __ ___ ___                                  *
-;*  |   / -_)  _/ -_) '_/ -_) ' \/ _/ -_|_-<                                  *
-;*  |_|_\___|_| \___|_| \___|_||_\__\___/__/                                  *
-;******************************************************************************
 
 
 
