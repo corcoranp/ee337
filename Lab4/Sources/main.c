@@ -1,4 +1,4 @@
-/*
+ /*
 Name:         Peter Corcoran, PMCORCOR
 Program:      Lab 4
 Version:      1.0
@@ -65,8 +65,9 @@ REAL TIME INTERRUPT  (RTI) CHARACTERISTICS
 
 #include <hidef.h>            //common defines and macros 
 #include "derivative.h"       //derivative-specific definitions
-//#include "vectors12.h"        //RAM-Based interrupt vectors
-#include "corcoran.h"         //just some of my c helpers...
+#include "common.h"         //just some of my c helpers...
+#include "LedControl.h"
+#include "button_control.h"
 
 
 
@@ -77,14 +78,12 @@ REAL TIME INTERRUPT  (RTI) CHARACTERISTICS
 
 //INIT FUNCTIONS
 void initializeLab(void);     //Initialization of program 
-void initSystemClock(void);
 void initSystemPorts(void);
 void initSystemInterrupts(void);
 void systemController(void);
 void updateDisplay(void);
 void updateTimer(void);
 bool setFlag(bool currentState, bool *previousState);
-
 //VARS
 volatile int counter             = 0;     //current count
 int counterUpperLimit   = 255;   //upper limit of counter before repeat
@@ -94,6 +93,7 @@ const int timerLimit    = 122; // 1s/8.192ms = 122
 volatile int timer      = 0;     //number of RTI times past...
 volatile int iterator   = 0;     //timer iterator
 
+
 bool isCounterOn        = true; //is counting 0 = false; 1 = true;
 bool isCountingUp       = true;  //is counting up = false; 1 = true;
 
@@ -101,7 +101,7 @@ bool isCounterOnFlagged  = false; // CounterOn Flag Raised
 bool isCountingUpFlagged = false; //Reset Flag
 bool isPresetHighFlagged = false;
 bool isPresetLowFlagged  = false;
-
+int previousCount = -1;
 struct buttonPressState buttonState;
 
 
@@ -138,24 +138,11 @@ void initializeLab(){
 }
 
 
-void initSystemClock(){
-//CLOCK SETUP
-   //SYNTHESIZER
-   SYNR     = 0x02;  // use PPL and 4-MHz crystal to genreate 24MHz clk
-   REFDV    = 0;     // REFERENCEDIVIDER
-   CLKSEL   =0x80;   // CLOCKSELECT, enable PPL, keep SYSCLK in wait mode   
-   PLLCTL   =0x60;   // enable PPL, set automatic bandwidth control         
-   while(!(CRGFLG & 0x08)); //wait until PLL locks into the target freq     
-}
 
 
 void initSystemPorts(){
-//PORTS 
-      DDRB  = 0xFF;      //PORT B as output
-      DDRJ  = 0xFF;      //PORT J as output
-      DDRP  = 0X0F;      //disable 7 segment
-      PTJ   = 0x00;     // LED display
-      PTH   = 0;         // push button inputs...
+      initializeLeds();
+      initializePushButtons();
 }
 
 
@@ -243,10 +230,10 @@ void systemController(){
    Desc:       Function updates the counter displayed on the LEDs
 */
 void updateDisplay(){
-      PORTB = counter;             //display on LEDs
-      PTP   = 0x0F; 
+   //DDRJ  = 0x00; //no leds
+   setPBLedsEnabled(false);
+   showMultiSegmentNumber(counter);
 }
-
 
 /*
    Function:   updateTimer
@@ -300,26 +287,6 @@ void interrupt VectorNumber_Vrti checkState(void){
 
 
 #pragma CODE_SEG DEFAULT
-/*
-   BUTTON ANALYSIS:
-   CURRENT PREVIOUS
-      0        0     = Disable flag
-      1        1     = Disable flag
-      1        0     = Enable flag & previous
-      0        1     = Disable flag & previous
-*/
-bool setFlag(bool currentState, bool *previousState){
-   if(*previousState==currentState){ //both states are equal = false
-      return false;
-   }
-   if(!*previousState && currentState){
-      return *previousState = true;
-   }
-   if(*previousState && !currentState){
-      return *previousState = false;
-   }
-   return false; //always return false
-}
 //#endregion ----------- INTERRUPT CODE ----------
 
 

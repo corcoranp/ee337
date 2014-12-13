@@ -15,6 +15,9 @@ FILE SECTION
 mc9s12dg256.c.o                         Model: BANKED,        Lang: ANSI-C
 main.c.o                                Model: BANKED,        Lang: ANSI-C
 Start12.c.o                             Model: BANKED,        Lang: ANSI-C
+LedControl.c.o                          Model: BANKED,        Lang: ANSI-C
+common.c.o                              Model: BANKED,        Lang: ANSI-C
+button_control.c.o                      Model: BANKED,        Lang: ANSI-C
 
 *********************************************************************************************
 STARTUP SECTION
@@ -23,7 +26,7 @@ Entry point: 0xC000 (_Startup)
 _startupData is allocated at 0xC015 and uses 6 Bytes
 extern struct _tagStartup {
   unsigned nofZeroOut     1
-  _Range   pZeroOut       0x1100     28
+  _Range   pZeroOut       0x1100     56
   _Copy    *toCopyDownBeg 0xC098
 } _startupData;
 
@@ -34,10 +37,10 @@ Section Name                    Size  Type     From       To       Segment
 .init                             21     R     0xC000     0xC014   ROM_C000
 .startData                        10     R     0xC015     0xC01E   ROM_C000
 NON_BANKED                       121     R     0xC01F     0xC097   ROM_C000
-.copy                             11     R     0xC098     0xC0A2   ROM_C000
-.text                            355     R   0x308000   0x308162   PAGE_30
+.copy                             31     R     0xC098     0xC0B6   ROM_C000
+.text                            727     R   0x308000   0x3082D6   PAGE_30
 .stack                           256   R/W     0x1000     0x10FF   RAM
-.data                              6   R/W     0x1100     0x1105   RAM
+.data                             26   R/W     0x1100     0x1119   RAM
 .abs_section_8                     1   N/I        0x8        0x8   .absSeg0
 .abs_section_9                     1   N/I        0x9        0x9   .absSeg1
 .abs_section_a                     1   N/I        0xA        0xA   .absSeg2
@@ -380,13 +383,13 @@ NON_BANKED                       121     R     0xC01F     0xC097   ROM_C000
 .abs_section_2ae                   2   N/I      0x2AE      0x2AF   .absSeg339
 .abs_section_2be                   2   N/I      0x2BE      0x2BF   .absSeg340
 .abs_section_fff0                  2     R     0xFFF0     0xFFF1   .absSeg341
-.bss                              14   R/W     0x1106     0x1113   RAM
-.common                            8   R/W     0x1114     0x111B   RAM
+.bss                              22   R/W     0x111A     0x112F   RAM
+.common                            8   R/W     0x1130     0x1137   RAM
 .vectSeg342_vect                   2     R     0xFFFE     0xFFFF   .vectSeg342
 
 Summary of section sizes per section type:
-READ_ONLY (R):         20A (dec:      522)
-READ_WRITE (R/W):      11C (dec:      284)
+READ_ONLY (R):         392 (dec:      914)
+READ_WRITE (R/W):      138 (dec:      312)
 NO_INIT (N/I):         190 (dec:      400)
 
 *********************************************************************************************
@@ -603,15 +606,15 @@ MODULE:                 -- mc9s12dg256.c.o --
      _PPSM                                      255       1       1       0   .abs_section_255
      _WOMM                                      256       1       1       0   .abs_section_256
      _MODRR                                     257       1       1       0   .abs_section_257
-     _PTP                                       258       1       1       1   .abs_section_258
+     _PTP                                       258       1       1       5   .abs_section_258
      _PTIP                                      259       1       1       0   .abs_section_259
-     _DDRP                                      25A       1       1       1   .abs_section_25a
+     _DDRP                                      25A       1       1       2   .abs_section_25a
      _RDRP                                      25B       1       1       0   .abs_section_25b
      _PERP                                      25C       1       1       0   .abs_section_25c
      _PPSP                                      25D       1       1       0   .abs_section_25d
      _PIEP                                      25E       1       1       0   .abs_section_25e
      _PIFP                                      25F       1       1       0   .abs_section_25f
-     _PTH                                       260       1       1       5   .abs_section_260
+     _PTH                                       260       1       1       6   .abs_section_260
      _PTIH                                      261       1       1       0   .abs_section_261
      _DDRH                                      262       1       1       0   .abs_section_262
      _RDRH                                      263       1       1       0   .abs_section_263
@@ -619,9 +622,9 @@ MODULE:                 -- mc9s12dg256.c.o --
      _PPSH                                      265       1       1       0   .abs_section_265
      _PIEH                                      266       1       1       0   .abs_section_266
      _PIFH                                      267       1       1       0   .abs_section_267
-     _PTJ                                       268       1       1       1   .abs_section_268
+     _PTJ                                       268       1       1       3   .abs_section_268
      _PTIJ                                      269       1       1       0   .abs_section_269
-     _DDRJ                                      26A       1       1       1   .abs_section_26a
+     _DDRJ                                      26A       1       1       2   .abs_section_26a
      _RDRJ                                      26B       1       1       0   .abs_section_26b
      _PERJ                                      26C       1       1       0   .abs_section_26c
      _PPSJ                                      26D       1       1       0   .abs_section_26d
@@ -685,7 +688,7 @@ MODULE:                 -- mc9s12dg256.c.o --
      _CAN4TXDLR                                 2BC       1       1       0   .abs_section_2bc
      _CAN4TXTBPR                                2BD       1       1       0   .abs_section_2bd
      _PORTAB                                      0       2       2       1   .abs_section_0
-     _DDRAB                                       2       2       2       1   .abs_section_2
+     _DDRAB                                       2       2       2       2   .abs_section_2
      _PARTID                                     1A       2       2       0   .abs_section_1a
      _TCNT                                       44       2       2       0   .abs_section_44
      _TC0                                        50       2       2       0   .abs_section_50
@@ -747,57 +750,85 @@ MODULE:                 -- main.c.o --
 - PROCEDURES:
      main                                    308000      12      18       2   .text       
      initializeLab                           308012      11      17       2   .text       
-     initSystemClock                         308023      13      19       2   .text       
-     initSystemPorts                         308036      12      18       2   .text       
-     initSystemInterrupts                    308048      16      22       2   .text       
-     compliment                              30805E      15      21       2   .text       
-     systemController                        308073      73     115       2   .text       
-     updateDisplay                           3080E6       B      11       2   .text       
-     updateTimer                             3080F1      25      37       2   .text       
-     setFlag                                 308116      24      36       8   .text       
+     initSystemPorts                         308023       9       9       2   .text       
+     initSystemInterrupts                    30802C      16      22       2   .text       
+     compliment                              308042      15      21       2   .text       
+     systemController                        308057      73     115       2   .text       
+     updateDisplay                           3080CA       E      14       2   .text       
+     updateTimer                             3080D8      25      37       2   .text       
      checkState                                C01F      79     121       1   NON_BANKED  
 - VARIABLES:
      counterUpperLimit                         1100       2       2       3   .data       
      isCounterOn                               1102       2       2       3   .data       
      isCountingUp                              1104       2       2       4   .data       
-     counter                                   1106       2       2      10   .bss        
-     counterLowerLimit                         1108       2       2       3   .bss        
-     timer                                     110A       2       2       4   .bss        
-     isCounterOnFlagged                        110C       2       2       3   .bss        
-     isCountingUpFlagged                       110E       2       2       3   .bss        
-     isPresetHighFlagged                       1110       2       2       3   .bss        
-     isPresetLowFlagged                        1112       2       2       3   .bss        
+     counter                                   111A       2       2      10   .bss        
+     counterLowerLimit                         111C       2       2       3   .bss        
+     timer                                     111E       2       2       4   .bss        
+     isCounterOnFlagged                        1120       2       2       3   .bss        
+     isCountingUpFlagged                       1122       2       2       3   .bss        
+     isPresetHighFlagged                       1124       2       2       3   .bss        
+     isPresetLowFlagged                        1126       2       2       3   .bss        
      _Vector_7                                 FFF0       2       2       0   .abs_section_fff0
-     buttonState                               1114       8       8       8   .common     
+     buttonState                               1130       8       8       8   .common     
 MODULE:                 -- Start12.c.o --
 - PROCEDURES:
-     Init                                    30813A      29      41       2   .text       
+     Init                                    3080FD      29      41       2   .text       
      _Startup                                  C000      15      21       0   .init       
 - VARIABLES:
      _startupData                              C015       6       6       3   .startData  
 - LABELS:
      __SEG_END_SSTACK                          1100       0       0       1               
+MODULE:                 -- LedControl.c.o --
+- PROCEDURES:
+     initializeLeds                          308126      17      23       2   .text       
+     setPBLedsEnabled                        30813D      15      21       2   .text       
+     setSegmentLedsEnabled                   308152       D      13       2   .text       
+     setOutputEnabled                        30815F       C      12       2   .text       
+     showNumberOnSegment                     30816B      14      20       8   .text       
+     showSegment                             30817F      2F      47       2   .text       
+     showMultiSegmentNumber                  3081AE      B3     179       2   .text       
+     count                                   308261      17      23       2   .text       
+- VARIABLES:
+     segmentArr                                1106      14      20       1   .data       
+MODULE:                 -- common.c.o --
+- PROCEDURES:
+     initSystemClock                         308278      13      19       2   .text       
+- VARIABLES:
+MODULE:                 -- button_control.c.o --
+- PROCEDURES:
+     initializePushButtons                   30828B       C      12       2   .text       
+     setSwitchEnabled                        308297       D      13       2   .text       
+     clearButtonState                        3082A4       F      15       2   .text       
+     setFlag                                 3082B3      24      36       8   .text       
+- VARIABLES:
+     buttonStateSingleton                      1128       8       8       4   .bss        
 
 *********************************************************************************************
 MODULE STATISTIC
   Name                                      Data   Code  Const
 ---------------------------------------------------------------------------------------------
   mc9s12dg256.c.o                            400      0      0
-  main.c.o                                    28    435      2
+  main.c.o                                    28    374      2
   Start12.c.o                                  0     62      0
-  other                                      256     12     11
+  LedControl.c.o                              20    338      0
+  common.c.o                                   0     19      0
+  button_control.c.o                           8     76      0
+  other                                      256     12     31
 
 *********************************************************************************************
 SECTION USE IN OBJECT-ALLOCATION SECTION
 ---------------------------------------------------------------------------------------------
 SECTION: ".text"
-  main initializeLab initSystemClock initSystemPorts initSystemInterrupts 
-  compliment systemController updateDisplay updateTimer setFlag Init 
+  main initializeLab initSystemPorts initSystemInterrupts compliment 
+  systemController updateDisplay updateTimer Init initializeLeds 
+  setPBLedsEnabled setSegmentLedsEnabled setOutputEnabled showNumberOnSegment 
+  showSegment showMultiSegmentNumber count initSystemClock 
+  initializePushButtons setSwitchEnabled clearButtonState setFlag 
 SECTION: ".data"
-  counterUpperLimit isCounterOn isCountingUp 
+  counterUpperLimit isCounterOn isCountingUp segmentArr 
 SECTION: ".bss"
   counter counterLowerLimit timer isCounterOnFlagged isCountingUpFlagged 
-  isPresetHighFlagged isPresetLowFlagged 
+  isPresetHighFlagged isPresetLowFlagged buttonStateSingleton 
 SECTION: ".init"
   _Startup 
 SECTION: "NON_BANKED"
@@ -1494,7 +1525,7 @@ OBJECT LIST SORTED BY ADDRESS
      Name                                      Addr   hSize   dSize     Ref    Section   RLIB
 ---------------------------------------------------------------------------------------------
      _PORTAB                                      0       2       2       1   .abs_section_0
-     _DDRAB                                       2       2       2       1   .abs_section_2
+     _DDRAB                                       2       2       2       2   .abs_section_2
      _PORTE                                       8       1       1       0   .abs_section_8
      _DDRE                                        9       1       1       0   .abs_section_9
      _PEAR                                        A       1       1       0   .abs_section_a
@@ -1751,15 +1782,15 @@ OBJECT LIST SORTED BY ADDRESS
      _PPSM                                      255       1       1       0   .abs_section_255
      _WOMM                                      256       1       1       0   .abs_section_256
      _MODRR                                     257       1       1       0   .abs_section_257
-     _PTP                                       258       1       1       1   .abs_section_258
+     _PTP                                       258       1       1       5   .abs_section_258
      _PTIP                                      259       1       1       0   .abs_section_259
-     _DDRP                                      25A       1       1       1   .abs_section_25a
+     _DDRP                                      25A       1       1       2   .abs_section_25a
      _RDRP                                      25B       1       1       0   .abs_section_25b
      _PERP                                      25C       1       1       0   .abs_section_25c
      _PPSP                                      25D       1       1       0   .abs_section_25d
      _PIEP                                      25E       1       1       0   .abs_section_25e
      _PIFP                                      25F       1       1       0   .abs_section_25f
-     _PTH                                       260       1       1       5   .abs_section_260
+     _PTH                                       260       1       1       6   .abs_section_260
      _PTIH                                      261       1       1       0   .abs_section_261
      _DDRH                                      262       1       1       0   .abs_section_262
      _RDRH                                      263       1       1       0   .abs_section_263
@@ -1767,9 +1798,9 @@ OBJECT LIST SORTED BY ADDRESS
      _PPSH                                      265       1       1       0   .abs_section_265
      _PIEH                                      266       1       1       0   .abs_section_266
      _PIFH                                      267       1       1       0   .abs_section_267
-     _PTJ                                       268       1       1       1   .abs_section_268
+     _PTJ                                       268       1       1       3   .abs_section_268
      _PTIJ                                      269       1       1       0   .abs_section_269
-     _DDRJ                                      26A       1       1       1   .abs_section_26a
+     _DDRJ                                      26A       1       1       2   .abs_section_26a
      _RDRJ                                      26B       1       1       0   .abs_section_26b
      _PERJ                                      26C       1       1       0   .abs_section_26c
      _PPSJ                                      26D       1       1       0   .abs_section_26d
@@ -1837,42 +1868,60 @@ OBJECT LIST SORTED BY ADDRESS
      counterUpperLimit                         1100       2       2       3   .data       
      isCounterOn                               1102       2       2       3   .data       
      isCountingUp                              1104       2       2       4   .data       
-     counter                                   1106       2       2      10   .bss        
-     counterLowerLimit                         1108       2       2       3   .bss        
-     timer                                     110A       2       2       4   .bss        
-     isCounterOnFlagged                        110C       2       2       3   .bss        
-     isCountingUpFlagged                       110E       2       2       3   .bss        
-     isPresetHighFlagged                       1110       2       2       3   .bss        
-     isPresetLowFlagged                        1112       2       2       3   .bss        
-     buttonState                               1114       8       8       8   .common     
+     segmentArr                                1106      14      20       1   .data       
+     counter                                   111A       2       2      10   .bss        
+     counterLowerLimit                         111C       2       2       3   .bss        
+     timer                                     111E       2       2       4   .bss        
+     isCounterOnFlagged                        1120       2       2       3   .bss        
+     isCountingUpFlagged                       1122       2       2       3   .bss        
+     isPresetHighFlagged                       1124       2       2       3   .bss        
+     isPresetLowFlagged                        1126       2       2       3   .bss        
+     buttonStateSingleton                      1128       8       8       4   .bss        
+     buttonState                               1130       8       8       8   .common     
      _Startup                                  C000      15      21       0   .init       
      checkState                                C01F      79     121       1   NON_BANKED  
      _Vector_7                                 FFF0       2       2       0   .abs_section_fff0
      main                                    308000      12      18       2   .text       
      initializeLab                           308012      11      17       2   .text       
-     initSystemClock                         308023      13      19       2   .text       
-     initSystemPorts                         308036      12      18       2   .text       
-     initSystemInterrupts                    308048      16      22       2   .text       
-     compliment                              30805E      15      21       2   .text       
-     systemController                        308073      73     115       2   .text       
-     updateDisplay                           3080E6       B      11       2   .text       
-     updateTimer                             3080F1      25      37       2   .text       
-     setFlag                                 308116      24      36       8   .text       
-     Init                                    30813A      29      41       2   .text       
+     initSystemPorts                         308023       9       9       2   .text       
+     initSystemInterrupts                    30802C      16      22       2   .text       
+     compliment                              308042      15      21       2   .text       
+     systemController                        308057      73     115       2   .text       
+     updateDisplay                           3080CA       E      14       2   .text       
+     updateTimer                             3080D8      25      37       2   .text       
+     Init                                    3080FD      29      41       2   .text       
+     initializeLeds                          308126      17      23       2   .text       
+     setPBLedsEnabled                        30813D      15      21       2   .text       
+     setSegmentLedsEnabled                   308152       D      13       2   .text       
+     setOutputEnabled                        30815F       C      12       2   .text       
+     showNumberOnSegment                     30816B      14      20       8   .text       
+     showSegment                             30817F      2F      47       2   .text       
+     showMultiSegmentNumber                  3081AE      B3     179       2   .text       
+     count                                   308261      17      23       2   .text       
+     initSystemClock                         308278      13      19       2   .text       
+     initializePushButtons                   30828B       C      12       2   .text       
+     setSwitchEnabled                        308297       D      13       2   .text       
+     clearButtonState                        3082A4       F      15       2   .text       
+     setFlag                                 3082B3      24      36       8   .text       
 
 *********************************************************************************************
 UNUSED-OBJECTS SECTION
 ---------------------------------------------------------------------------------------------
+NOT USED PROCEDURES
+LedControl.c.o:
+  setLedOutput 
+button_control.c.o:
+  getButtonState 
 NOT USED VARIABLES
 main.c.o:
-  timerLimit iterator 
+  timerLimit previousCount iterator 
 
 *********************************************************************************************
 COPYDOWN SECTION
 ---------------------------------------------------------------------------------------------
 ------- ROM-ADDRESS: 0xC098 ---- SIZE       4 ---
 Filling bytes inserted
- 00051101
+ 00191101
 ------- ROM-ADDRESS: 0xC09C ---- RAM-ADDRESS: 0x1101 ---- SIZE       1 ---
 Name of initialized Object : counterUpperLimit:1
  FF
@@ -1888,7 +1937,14 @@ Filling bytes inserted
 ------- ROM-ADDRESS: 0xC0A0 ---- RAM-ADDRESS: 0x1105 ---- SIZE       1 ---
 Name of initialized Object : isCountingUp:1
  01
-------- ROM-ADDRESS: 0xC0A1 ---- SIZE       2 ---
+------- ROM-ADDRESS: 0xC0A1 ---- SIZE       1 ---
+Filling bytes inserted
+ 00
+------- ROM-ADDRESS: 0xC0A2 ---- RAM-ADDRESS: 0x1107 ---- SIZE      19 ---
+Name of initialized Object : segmentArr:1
+ 3F0006005B 004F006600 6D007D0007
+ 007F006F
+------- ROM-ADDRESS: 0xC0B5 ---- SIZE       2 ---
 Filling bytes inserted
  0000
 
@@ -1904,16 +1960,26 @@ main                      USES initializeLab systemController updateTimer
                                 updateDisplay 
 initializeLab             USES initSystemClock initSystemPorts 
                                 initSystemInterrupts 
-initSystemClock           USES _SYNR _REFDV _CLKSEL _PLLCTL _CRGFLG 
-initSystemPorts           USES _DDRAB _DDRJ _DDRP _PTJ _PTH 
+initSystemPorts           USES initializeLeds initializePushButtons 
 initSystemInterrupts      USES _CRGINT _RTICTL buttonState 
 systemController          USES isCounterOnFlagged isCounterOn counter 
                                 counterLowerLimit isCountingUp counterUpperLimit 
                                 isCountingUpFlagged compliment isPresetHighFlagged 
                                 isPresetLowFlagged 
-updateDisplay             USES counter _PORTAB _PTP 
+updateDisplay             USES setPBLedsEnabled counter showMultiSegmentNumber 
 updateTimer               USES isCounterOn timer isCountingUp counter 
 Init                      USES _startupData 
+initializeLeds            USES setOutputEnabled setSegmentLedsEnabled _DDRJ 
+setPBLedsEnabled          USES _PTJ 
+setSegmentLedsEnabled     USES _DDRP 
+setOutputEnabled          USES _DDRAB 
+showNumberOnSegment       USES segmentArr _PORTAB showSegment 
+showSegment               USES _PTP 
+showMultiSegmentNumber    USES _PTP showNumberOnSegment count 
+initSystemClock           USES _SYNR _REFDV _CLKSEL _PLLCTL _CRGFLG 
+initializePushButtons     USES setSwitchEnabled clearButtonState 
+setSwitchEnabled          USES _PTH 
+clearButtonState          USES buttonStateSingleton 
 
 *********************************************************************************************
 DEPENDENCY TREE
@@ -1927,7 +1993,19 @@ DEPENDENCY TREE
  |  |  +- initSystemClock     
  |  |  |    
  |  |  +- initSystemPorts     
- |  |  |    
+ |  |  |  | 
+ |  |  |  +- initializeLeds      
+ |  |  |  |  | 
+ |  |  |  |  +- setOutputEnabled    
+ |  |  |  |  |    
+ |  |  |  |  +- setSegmentLedsEnabled
+ |  |  |  |       
+ |  |  |  +- initializePushButtons
+ |  |  |     | 
+ |  |  |     +- setSwitchEnabled    
+ |  |  |     |    
+ |  |  |     +- clearButtonState    
+ |  |  |          
  |  |  +- initSystemInterrupts
  |  |       
  |  +- systemController    
@@ -1937,7 +2015,17 @@ DEPENDENCY TREE
  |  +- updateTimer         
  |  |    
  |  +- updateDisplay       
- |       
+ |     | 
+ |     +- setPBLedsEnabled    
+ |     |    
+ |     +- showMultiSegmentNumber
+ |        | 
+ |        +- showNumberOnSegment 
+ |        |  | 
+ |        |  +- showSegment         
+ |        |       
+ |        +- count               
+ |             
  +- _Startup            
     | 
     +- Init                
@@ -1957,5 +2045,5 @@ STATISTIC SECTION
 ExeFile:
 --------
 Number of blocks to be downloaded: 7
-Total size of all blocks to be downloaded: 522
+Total size of all blocks to be downloaded: 914
 
